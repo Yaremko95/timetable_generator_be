@@ -5,7 +5,7 @@ const path = require("path");
 const sequelize = new Sequelize(
   process.env.DATABSE,
   process.env.USERNAME,
-  process.env.PGPASSWORD,
+  process.env.PASSWORD,
   {
     host: process.env.HOST,
     dialect: "postgres",
