@@ -35,7 +35,7 @@ db.timetableFreeSpaces = require("./TimetableFreeSpaceModal")(
 );
 db.classFilledSpaces = require("./ClassFilledSpaceModal")(sequelize, Sequelize);
 db.groups = require("./GroupModal")(sequelize, Sequelize);
-db.classrooms = require("./ClassroomModalModal")(sequelize, Sequelize);
+db.classrooms = require("./ClassroomModal")(sequelize, Sequelize);
 db.classroomClasses = require("./ClassroomClassModal")(sequelize, Sequelize);
 db.groupClasses = require("./GroupClassModal")(sequelize, Sequelize);
 const User = db.users;
