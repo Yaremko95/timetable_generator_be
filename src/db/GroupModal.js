@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.STREAM_COPY,
         required: true,
       },
       timetableId: {
@@ -27,7 +27,7 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       empty_space: {
-        type: Sequelize.ARRAY(Sequelize.NUMBER),
+        type: Sequelize.ARRAY(DataTypes.INTEGER),
         defaultValue: [],
       },
       // classId: {

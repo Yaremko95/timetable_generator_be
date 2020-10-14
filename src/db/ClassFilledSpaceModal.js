@@ -20,11 +20,11 @@ module.exports = (sequelize, Sequelize) => {
       },
 
       classId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         required: true,
       },
       freeSpaceId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
       },
     },
     { timestamps: false }

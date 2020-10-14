@@ -26,7 +26,7 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       free_space: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       isFree: {
         type: DataTypes.BOOLEAN,

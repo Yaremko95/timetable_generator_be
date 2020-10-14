@@ -19,11 +19,11 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       total_hours: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         required: true,
       },
       total_days: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         required: true,
       },
 

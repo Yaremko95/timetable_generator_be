@@ -44,6 +44,9 @@ const Class = db.classes;
 const TimetableFreeSpace = db.timetableFreeSpaces;
 const ClassFilledSpace = db.classFilledSpaces;
 const Group = db.groups;
+const Classroom = db.classrooms;
+const ClassroomClass = db.classroomClasses;
+const GroupClass = db.groupClasses;
 console.log(db);
 
 module.exports = db;

@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.STRING,
         required: true,
       },
       timetableId: {

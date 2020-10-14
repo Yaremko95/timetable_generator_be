@@ -38,7 +38,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       duration: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       // filled: {

@@ -58,7 +58,7 @@ module.exports = (sequelize, Sequelize) => {
         defaultValue: [],
       },
       isVerified: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
 
