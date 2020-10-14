@@ -103,4 +103,5 @@ Group.hasMany(User, { foreignKey: "groupId", as: "students" });
 User.belongsTo(Group, { foreignKey: "groupId" });
 User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
 Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
+User.sync({ force: true });
 module.exports = User;

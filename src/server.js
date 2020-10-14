@@ -31,9 +31,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(passport.initialize());
-sequelize.sync().then(() => {
-  console.log("Drop and Resync with { force: true }");
-});
+// sequelize.sync().then(() => {
+//   console.log("Drop and Resync with { force: true }");
+// });
 
 app.use("/users", usersRouter);
 //app.use("/load", loadRouter);
