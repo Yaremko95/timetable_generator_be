@@ -95,5 +95,7 @@ Group.belongsTo(Timetable, { foreignKey: "timetableId" });
 Timetable.hasMany(Group, { foreignKey: "timetableId", as: "groups" });
 Classroom.belongsTo(Timetable, { foreignKey: "timetableId" });
 Timetable.hasMany(Classroom, { foreignKey: "timetableId", as: "classrooms" });
-
+// sequelize.sync({ force: true }).then(() => {
+//   console.log(`Database & tables created!`);
+// });
 module.exports = db;

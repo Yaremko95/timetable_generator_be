@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../../../db/UserSchema");
+const User = require("../../../db/index").users;
 
 const authenticate = async (user) => {
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {

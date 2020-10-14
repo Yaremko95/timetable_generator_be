@@ -1,13 +1,13 @@
-const User = require("../../../db/UserSchema");
-const Class = require("../../../db/ClassSchema");
-const GroupClass = require("../../../db/GroupClass");
-const ClassRoom = require("../../../db/ClassRoomSchema");
-const Group = require("../../../db/GroupSchema");
-const Timetable = require("../../../db/TimeTableSchema");
-const TeacherEmptySpace = require("../schemas/TeacherEmptySpace");
-const TimetableFreeSpace = require("../../../db/TimetableFreeSpace");
-const ClassFilledSpace = require("../../../db/ClassFilledSpace");
-const { Op, Sequelize } = require("sequelize");
+// const User = require("../../../db/index");
+// const Class = require("../../../db/index");
+// const GroupClass = require("../../../db/index");
+// const ClassRoom = require("../../../db/index");
+// const Group = require("../../../db/index");
+// const Timetable = require("../../../db/index");
+// const TeacherEmptySpace = require("../schemas/index");
+// const TimetableFreeSpace = require("../../../db/index");
+// const ClassFilledSpace = require("../../../db/index");
+// const { Op, Sequelize } = require("sequelize");
 //const { validTeacherGroupRaw } = require("./timetable.ustils");
 const hardConstraintCost = (free, classes) => {
   // console.log(free);
@@ -100,4 +100,4 @@ const checkHardConstraints = (free, classes) => {
   return overlaps;
 };
 
-module.exports = { hardConstraintCost, checkHardConstraints };
+module.exports = { hardConstraintCost, checkHardConstraintsindex };

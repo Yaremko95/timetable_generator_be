@@ -1,23 +1,23 @@
 const express = require("express");
 
 const router = express.Router();
-const User = require("../../db/UserSchema");
-const Class = require("../../db/ClassSchema");
-const GroupClass = require("../../db/GroupClass");
+const User = require("../../db/index").users;
+const Class = require("../../db/index").classes;
+const GroupClass = require("../../db/index").groupClasses;
 const {
   teachers,
   groups,
   classrooms,
   classes,
 } = require("../loadData/testData");
-const ClassRoom = require("../../db/ClassRoomSchema");
-const Group = require("../../db/GroupSchema");
-const Timetable = require("../../db/TimeTableSchema");
-const TeacherEmptySpace = require("./schemas/TeacherEmptySpace");
-const TimetableFreeSpace = require("../../db/TimetableFreeSpace");
+const ClassRoom = require("../../db/index").classrooms;
+const Group = require("../../db/index").groups;
+const Timetable = require("../../db/index").timetables;
+const TeacherEmptySpace = require("./schemas/index");
+//const TimetableFreeSpace = require("../../db/index");
 //const UserGroup = require("./schemas/UserGroup");
 const Json2csvParser = require("json2csv").Parser;
-const ClassFilledSpace = require("../../db/ClassFilledSpace");
+const ClassFilledSpace = require("../../db/index").classFilledSpaces;
 const {
   setToDefault,
   getTimetable,
@@ -491,20 +491,20 @@ router.route("/loadClasses").post(async (req, res, next) => {
         },
       });
 
-      const [
-        teacherEmptySpace,
-        teacherEmptySpaceCreated,
-      ] = await TeacherEmptySpace.findOrCreate({
-        where: {
-          teacherId: user.id,
-          timetableId: timetable.id,
-        },
-        defaults: {
-          teacherId: user.id,
-          timetableId: timetable.id,
-          empty_space: [],
-        },
-      });
+      // const [
+      //   teacherEmptySpace,
+      //   teacherEmptySpaceCreated,
+      // ] = await TeacherEmptySpace.findOrCreate({
+      //   where: {
+      //     teacherId: user.id,
+      //     timetableId: timetable.id,
+      //   },
+      //   defaults: {
+      //     teacherId: user.id,
+      //     timetableId: timetable.id,
+      //     empty_space: [],
+      //   },
+      // });
       // console.log(user);
       const groupsId = [];
       for (let g = 0; g < test[i].groups.length; g++) {

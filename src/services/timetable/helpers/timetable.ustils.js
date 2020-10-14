@@ -1,12 +1,12 @@
-const User = require("../../../db/UserSchema");
-const Class = require("../../../db/ClassSchema");
-const GroupClass = require("../../../db/GroupClass");
-const ClassRoom = require("../../../db/ClassRoomSchema");
-const Group = require("../../../db/GroupSchema");
-const Timetable = require("../../../db/TimeTableSchema");
-const TeacherEmptySpace = require("../schemas/TeacherEmptySpace");
-const TimetableFreeSpace = require("../../../db/TimetableFreeSpace");
-const ClassFilledSpace = require("../../../db/ClassFilledSpace");
+const User = require("../../../db/index").users;
+const Class = require("../../../db/index").classes;
+const GroupClass = require("../../../db/index").groupClasses;
+const ClassRoom = require("../../../db/index").classrooms;
+const Group = require("../../../db/index").groups;
+const Timetable = require("../../../db/index").timetables;
+//const TeacherEmptySpace = require("../schemas/index")
+const TimetableFreeSpace = require("../../../db/index").timetableFreeSpaces;
+const ClassFilledSpace = require("../../../db/index").classFilledSpaces;
 const { Op, Sequelize } = require("sequelize");
 const { hardConstraintCost, checkHardConstraints } = require("./timetableCost");
 
