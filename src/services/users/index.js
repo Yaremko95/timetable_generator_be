@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-const User = require("./UserSchema");
+const User = require("../../db/UserSchema");
 const jwt = require("jsonwebtoken");
 const Timetable = require("../timetable/schemas/TimeTableSchema");
 const { sendVerificationEmail } = require("./utils/index");

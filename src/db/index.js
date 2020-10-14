@@ -20,7 +20,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tables
-db.users = sequelize.import("../services/users/UserSchema.js");
+db.users = sequelize.import(__dirname + "/UserSchema");
 db.timetables = require("../services/timetable/schemas/TimeTableSchema")(
   sequelize,
   Sequelize

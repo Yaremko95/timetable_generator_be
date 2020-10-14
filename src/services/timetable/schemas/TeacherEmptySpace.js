@@ -1,6 +1,6 @@
 const orm = require("../../../db");
 const Sequelize = require("sequelize");
-const User = require("../../users/UserSchema");
+const User = require("../../../db/UserSchema");
 const Timetable = require("./TimeTableSchema");
 const TeacherEmptySpace = orm.define(
   "teacher_empty_spaces",

@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-const User = require("../users/UserSchema");
+const User = require("../../db/UserSchema");
 const Class = require("./schemas/ClassSchema");
 const GroupClass = require("./schemas/GroupClass");
 const {
