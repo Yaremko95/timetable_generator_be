@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
-const User = require("../db/UserSchema");
+const User = require("../db/index").users;
 const { authenticate } = require("../services/users/utils/helpers");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
