@@ -508,6 +508,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
       // console.log(user);
       const groupsId = [];
       for (let g = 0; g < test[i].groups.length; g++) {
+        console.log("group");
         const [group, groupCreated] = await Group.findOrCreate({
           where: { title: test[i].groups[g], timetableId: timetable.id },
           defaults: { title: test[i].groups[g], timetableId: timetable.id },
@@ -516,6 +517,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
       }
       const classroomsId = [];
       for (let c = 0; c < test[i].classrooms.length; c++) {
+        console.log("classroom");
         const [classroom, classroomCreated] = await ClassRoom.findOrCreate({
           where: { title: test[i].classrooms[c], timetableId: timetable.id },
           defaults: { title: test[i].classrooms[c], timetableId: timetable.id },
@@ -531,6 +533,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
             // console.log((i % (20 / 4)) + 8);
             //
             // console.log(Math.floor(i / (20 / 4)));
+            console.log("timetableFreeSpace");
             await TimetableFreeSpace.create({
               timetableId: timetable.id,
               classroomId: classroom.id,
@@ -548,14 +551,16 @@ router.route("/loadClasses").post(async (req, res, next) => {
         }
         classroomsId.push(classroom.id);
       }
+      console.log("class");
       Class.create({
         subject: test[i].subject,
         duration: test[i].duration,
         teacherId: user.id,
         timetableId: timetable.id,
       }).then((newClass) => {
-        // console.log(newClass);
+        console.log("newClas groups");
         newClass.addGroups(groupsId);
+        console.log("newClass classroom");
         newClass.addClassrooms(classroomsId);
       });
     }
