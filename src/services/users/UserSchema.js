@@ -2,9 +2,13 @@
 //const Sequelize = require("sequelize");
 const Moment = require("moment");
 const bcrypt = require("bcrypt");
-const Group = require("../timetable/schemas/GroupSchema");
+const db = require("../../db");
+const Group = db.groups;
+//const Group = require("../timetable/schemas/GroupSchema");
 //const UserGroup = require("../timetable/schemas/UserGroup");
-const Timetable = require("../timetable/schemas/TimeTableSchema");
+
+const Timetable = db.timetables;
+//const Timetable = require("../timetable/schemas/TimeTableSchema");
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define(
     "users",
@@ -100,9 +104,9 @@ module.exports = (sequelize, Sequelize) => {
   User.prototype.validPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
   };
-  // Group.hasMany(User, { foreignKey: "groupId", as: "students" });
-  // User.belongsTo(Group, { foreignKey: "groupId" });
-  // User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
-  // Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
+  Group.hasMany(User, { foreignKey: "groupId", as: "students" });
+  User.belongsTo(Group, { foreignKey: "groupId" });
+  User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
+  Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
   return User;
 };

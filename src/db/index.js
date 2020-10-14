@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize(
   process.env.DATABSE,
@@ -21,6 +21,38 @@ db.sequelize = sequelize;
 
 //Models/tables
 db.users = require("../services/users/UserSchema")(sequelize, Sequelize);
+db.timetables = require("../services/timetable/schemas/TimeTableSchema")(
+  sequelize,
+  Sequelize
+);
+db.classes = require("../services/timetable/schemas/ClassSchema")(
+  sequelize,
+  Sequelize
+);
+db.timetableFreeSpaces = require("../services/timetable/schemas/TimetableFreeSpace")(
+  sequelize,
+  DataTypes
+);
+db.classFilledSpaces = require("../services/timetable/schemas/ClassFilledSpace")(
+  sequelize,
+  Sequelize
+);
+db.groups = require("../services/timetable/schemas/GroupSchema")(
+  sequelize,
+  Sequelize
+);
+db.classrooms = require("../services/timetable/schemas/ClassRoomSchema")(
+  sequelize,
+  Sequelize
+);
+db.classroomClasses = require("../services/timetable/schemas/ClassromClass")(
+  sequelize,
+  Sequelize
+);
+db.groupClasses = require("../services/timetable/schemas/GroupClass")(
+  sequelize,
+  Sequelize
+);
 // const models = {
 //   User: require("../services/users/UserSchema")(sequelize, Sequelize),
 //   Timetable: require("../services/timetable/schemas/TimeTableSchema")(
