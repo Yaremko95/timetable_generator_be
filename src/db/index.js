@@ -51,8 +51,8 @@ console.log(db);
 User.prototype.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-Group.hasMany(User, { foreignKey: "groupId", as: "students" });
-User.belongsTo(Group, { foreignKey: "groupId" });
+// Group.hasMany(User, { foreignKey: "groupId", as: "students" });
+// User.belongsTo(Group, { foreignKey: "groupId" });
 User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
 Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
 User.hasMany(Class, { foreignKey: "teacherId", as: "classes" });
