@@ -9,7 +9,7 @@ const Group = db.groups;
 
 const Timetable = db.timetables;
 //const Timetable = require("../timetable/schemas/TimeTableSchema");
-module.exports = (sequelize, Sequelize) => {
+module.exports = function (sequelize, Sequelize) {
   const User = sequelize.define(
     "users",
     {
