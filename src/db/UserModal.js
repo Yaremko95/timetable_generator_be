@@ -1,7 +1,7 @@
 //const orm = require("../../db");
 //const Sequelize = require("sequelize");
 const Moment = require("moment");
-
+const bcrypt = require("bcrypt");
 const db = require("./index");
 //const Group = db.groups;
 //const Group = require("../timetable/schemas/GroupSchema");
