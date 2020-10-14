@@ -47,7 +47,7 @@ const Group = db.groups;
 const Classroom = db.classrooms;
 const ClassroomClass = db.classroomClasses;
 const GroupClass = db.groupClasses;
-console.log(db);
+//console.log(db);
 User.prototype.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
