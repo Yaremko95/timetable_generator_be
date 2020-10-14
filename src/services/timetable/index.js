@@ -474,12 +474,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
         // start_time: setDate(8, 30),
       },
     });
-    // const timetable = await Timetable.create({
-    //   title: "strive12",
-    //   adminId: 55,
-    //   total_hours: 60,
-    // });
-    // console.log(timetable);
+
     for (let i = 0; i < test.length; i++) {
       const [user, userCreated] = await User.findOrCreate({
         where: {
