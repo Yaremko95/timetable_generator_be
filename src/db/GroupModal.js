@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: Sequelize.STREAM_COPY,
+        type: Sequelize.STRING,
         required: true,
       },
       timetableId: {
