@@ -48,5 +48,52 @@ const Classroom = db.classrooms;
 const ClassroomClass = db.classroomClasses;
 const GroupClass = db.groupClasses;
 console.log(db);
+User.prototype.validPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+Group.hasMany(User, { foreignKey: "groupId", as: "students" });
+User.belongsTo(Group, { foreignKey: "groupId" });
+User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
+Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
+User.hasMany(Class, { foreignKey: "teacherId", as: "classes" });
+Class.belongsTo(User, { foreignKey: "teacherId", as: "teacher" });
+Timetable.hasMany(Class, {
+  foreignKey: "timetableId",
+  as: "classes",
+  onDelete: "CASCADE",
+});
+
+Class.belongsTo(Timetable, { foreignKey: "timetableId", as: "timetable" });
+Group.belongsToMany(Class, { through: GroupClass, as: "classes" });
+Class.belongsToMany(Group, { through: GroupClass, as: "groups" });
+
+Classroom.belongsToMany(Class, { through: ClassroomClass, as: "classes" });
+Class.belongsToMany(Classroom, { through: ClassroomClass, as: "classrooms" });
+
+TimetableFreeSpace.belongsTo(Timetable, {
+  foreignKey: "timetableId",
+  as: "timetable",
+});
+Timetable.hasMany(TimetableFreeSpace, {
+  foreignKey: "timetableId",
+  as: "free",
+});
+
+TimetableFreeSpace.belongsTo(Classroom, { foreignKey: "classroomId" });
+Classroom.hasMany(TimetableFreeSpace, { foreignKey: "classroomId" });
+TimetableFreeSpace.hasOne(ClassFilledSpace, {
+  foreignKey: "freeSpaceId",
+  as: "freeSpace",
+});
+ClassFilledSpace.belongsTo(TimetableFreeSpace, {
+  foreignKey: "freeSpaceId",
+  as: "freeSpace",
+});
+ClassFilledSpace.belongsTo(Class, { foreignKey: "classId" });
+Class.hasMany(ClassFilledSpace, { foreignKey: "classId", as: "filled" });
+Group.belongsTo(Timetable, { foreignKey: "timetableId" });
+Timetable.hasMany(Group, { foreignKey: "timetableId", as: "groups" });
+Classroom.belongsTo(Timetable, { foreignKey: "timetableId" });
+Timetable.hasMany(Classroom, { foreignKey: "timetableId", as: "classrooms" });
 
 module.exports = db;
