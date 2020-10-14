@@ -10,7 +10,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const pass = require("./passport");
 
-const sequelize = require("./db/index");
+const models = require("./db/index");
 
 const app = express();
 
@@ -43,6 +43,14 @@ app.use(
   timetableRouter
 );
 console.log(listEndpoints(app));
-app.listen(process.env.PORT, () => {
-  console.log("running on port ", process.env.PORT);
-});
+models.sequelize
+  .sync({ force: true })
+  .then((result) => {
+    console.log(result);
+    app.listen(process.env.PORT, () => {
+      console.log("running on port ", process.env.PORT);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });

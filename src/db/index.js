@@ -14,14 +14,25 @@ const sequelize = new Sequelize(
     },
   }
 );
-// const db = {};
-//
-// db.Sequelize = Sequelize;
-// db.sequelize = sequelize;
-//
-// //Models/tables
-// db.users = require("../model/customer.model.js")(sequelize, Sequelize);
+const models = {
+  User: require("../services/users/UserSchema"),
+  Timetable: require("../services/timetable/schemas/TimeTableSchema"),
+  Class: require("../services/timetable/schemas/ClassSchema"),
+  TimetableFreeSpace: require("../services/timetable/schemas/TimetableFreeSpace"),
+  ClassFilledSpace: require("../services/timetable/schemas/ClassFilledSpace"),
+  Group: require("../services/timetable/schemas/GroupSchema"),
+  Classroom: require("../services/timetable/schemas/ClassRoomSchema"),
+  ClassroomClass: require("../services/timetable/schemas/ClassromClass"),
+  GroupClass: require("../services/timetable/schemas/GroupClass"),
+};
 
-// module.exports = db;
+Object.keys(models).forEach((modelName) => {
+  if ("associate" in models[modelName]) {
+    models[modelName].associate(models);
+  }
+});
 
-module.exports = sequelize;
+models.sequelize = sequelize;
+models.Sequelize = Sequelize;
+
+module.exports = models;
