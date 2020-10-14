@@ -12,7 +12,7 @@ const {
 } = require("../loadData/testData");
 const ClassRoom = require("./schemas/ClassRoomSchema");
 const Group = require("./schemas/GroupSchema");
-const Timetable = require("./schemas/TimeTableSchema");
+const Timetable = require("../../db/TimeTableSchema");
 const TeacherEmptySpace = require("./schemas/TeacherEmptySpace");
 const TimetableFreeSpace = require("./schemas/TimetableFreeSpace");
 //const UserGroup = require("./schemas/UserGroup");

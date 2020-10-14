@@ -3,7 +3,7 @@ const passport = require("passport");
 const router = express.Router();
 const User = require("../../db/UserSchema");
 const jwt = require("jsonwebtoken");
-const Timetable = require("../timetable/schemas/TimeTableSchema");
+const Timetable = require("../../db/TimeTableSchema");
 const { sendVerificationEmail } = require("./utils/index");
 router.post(
   "/logout",
