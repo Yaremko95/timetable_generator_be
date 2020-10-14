@@ -100,4 +100,4 @@ const checkHardConstraints = (free, classes) => {
   return overlaps;
 };
 
-module.exports = { hardConstraintCost, checkHardConstraintsindex };
+module.exports = { hardConstraintCost, checkHardConstraints };
