@@ -7,6 +7,9 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: true,
+    },
     pool: {
       //optional!
       min: 0,
@@ -20,7 +23,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tables
-db.users = sequelize.import(path.join(__dirname + "/UserSchema"));
+db.users = sequelize.import(path.join(__dirname, "UserSchema"));
 db.timetables = require(__dirname + "/TimeTableSchema")(sequelize, Sequelize);
 db.classes = require("../services/timetable/schemas/ClassSchema")(
   sequelize,
