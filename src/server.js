@@ -9,6 +9,7 @@ const timetableRouter = require("./services/timetable");
 const dotenv = require("dotenv");
 dotenv.config();
 const pass = require("./passport");
+
 const sequelize = require("./db/index");
 
 const app = express();
@@ -30,6 +31,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(passport.initialize());
+sequelize.sync().then(() => {
+  console.log("Drop and Resync with { force: true }");
+});
 
 app.use("/users", usersRouter);
 //app.use("/load", loadRouter);

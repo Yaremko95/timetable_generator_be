@@ -14,5 +14,14 @@ const sequelize = new Sequelize(
     },
   }
 );
+// const db = {};
+//
+// db.Sequelize = Sequelize;
+// db.sequelize = sequelize;
+//
+// //Models/tables
+// db.users = require("../model/customer.model.js")(sequelize, Sequelize);
+
+// module.exports = db;
 
 module.exports = sequelize;
