@@ -1,4 +1,5 @@
 const db = require("./index");
+const { DataTypes } = require("sequelize");
 const Class = db.classes;
 const TimetableFreeSpace = db.timetableFreeSpaces;
 //const Classroom = db.classrooms
@@ -13,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     "class_filled_spaces",
     {
       id: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },

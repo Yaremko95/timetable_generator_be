@@ -1,5 +1,5 @@
 const orm = require("./index");
-const Sequelize = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 const db = require("./index");
 const User = db.users;
@@ -20,17 +20,17 @@ module.exports = (sequelize, Sequelize) => {
     "classes",
     {
       id: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
       timetableId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       teacherId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       subject: {

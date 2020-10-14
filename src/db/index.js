@@ -24,20 +24,26 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-//Models/tables
+//Models/tablesSequelize
 db.users = require("./UserModal")(sequelize, Sequelize);
 db.timetables = require("./TimetableModal")(sequelize, Sequelize);
 
 db.classes = require("./ClassModal")(sequelize, Sequelize);
 db.timetableFreeSpaces = require("./TimetableFreeSpaceModal")(
   sequelize,
-  DataTypes
+  Sequelize
 );
 db.classFilledSpaces = require("./ClassFilledSpaceModal")(sequelize, Sequelize);
 db.groups = require("./GroupModal")(sequelize, Sequelize);
 db.classrooms = require("./ClassModal")(sequelize, Sequelize);
 db.classroomClasses = require("./ClassroomClassModal")(sequelize, Sequelize);
 db.groupClasses = require("./GroupClassModal")(sequelize, Sequelize);
+const User = db.users;
+const Timetable = db.timetables;
+const Class = db.classes;
+const TimetableFreeSpace = db.timetableFreeSpaces;
+const ClassFilledSpace = db.classFilledSpaces;
+const Group = db.groups;
 console.log(db);
 
 module.exports = db;

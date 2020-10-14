@@ -4,12 +4,13 @@
 //const Class = require("./ClassSchema");
 //const TeacherEmptySpace = require("./TeacherEmptySpace");
 //const Group = require("./GroupSchema");
+const { DataTypes } = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
   const Timetable = sequelize.define(
     "timetables",
     {
       id: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
@@ -27,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
       },
 
       adminId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

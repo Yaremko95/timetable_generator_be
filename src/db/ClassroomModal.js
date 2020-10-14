@@ -1,7 +1,7 @@
 // const orm = require("../../../db");
 // const Sequelize = require("sequelize");
 //const Timetable = require("./TimeTableSchema");
-
+const { DataTypes } = require("sequelize");
 const db = require("./index");
 const Timetable = db.timetables;
 module.exports = (sequelize, Sequelize) => {
@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
     "classrooms",
     {
       id: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       timetableId: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         required: true,
       },
     },

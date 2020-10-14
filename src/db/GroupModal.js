@@ -4,6 +4,7 @@
 //const UserGroup = require("./UserGroup");
 //const User = require("../../users/UserSchema");
 const db = require("./index");
+const { DataTypes } = require("sequelize");
 // const Group = db.groups;
 // const Class = db.classes;
 const Timetable = db.timetables;
@@ -13,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     "groups",
     {
       id: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
@@ -22,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       timetableId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         required: true,
       },
       empty_space: {

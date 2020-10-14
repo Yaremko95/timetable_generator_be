@@ -6,22 +6,23 @@ const db = require("./index");
 // const Class = db.classes;
 const Timetable = db.timetables;
 const Classroom = db.classrooms;
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize, Sequelize) => {
   const TimetableFreeSpace = sequelize.define(
     "timetable_free_spaces",
     {
       id: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
       timetableId: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         required: true,
       },
       classroomId: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         required: true,
       },
       free_space: {

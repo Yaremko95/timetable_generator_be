@@ -9,12 +9,13 @@ const db = require("./index");
 
 //const Timetable = db.timetables;
 //const Timetable = require("../timetable/schemas/TimeTableSchema");
+const { DataTypes } = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define(
     "users",
     {
       id: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
@@ -79,7 +80,7 @@ module.exports = (sequelize, Sequelize) => {
       //     allowNull: true,
       // },
       groupId: {
-        type: Sequelize.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
     },
