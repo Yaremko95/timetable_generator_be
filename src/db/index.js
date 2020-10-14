@@ -21,7 +21,7 @@ db.sequelize = sequelize;
 
 //Models/tables
 db.users = sequelize.import(__dirname + "/UserSchema");
-db.timetables = require(__dirname + "./TimeTableSchema")(sequelize, Sequelize);
+db.timetables = require(__dirname + "/TimeTableSchema")(sequelize, Sequelize);
 db.classes = require("../services/timetable/schemas/ClassSchema")(
   sequelize,
   Sequelize
