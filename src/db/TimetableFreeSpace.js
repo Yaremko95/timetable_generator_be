@@ -1,7 +1,7 @@
 //const orm = require("../../../db");
 //const { Sequelize, Op, Model, DataTypes } = require("sequelize");
 //const Sequelize = require("sequelize");
-const db = require("../../db");
+const db = require("./index");
 // const Group = db.groups;
 // const Class = db.classes;
 const Timetable = db.timetables;

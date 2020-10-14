@@ -3,7 +3,7 @@
 //const Timetable = require("./TimeTableSchema");
 //const UserGroup = require("./UserGroup");
 //const User = require("../../users/UserSchema");
-const db = require("../../db");
+const db = require("./index");
 // const Group = db.groups;
 // const Class = db.classes;
 const Timetable = db.timetables;
@@ -22,11 +22,11 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       timetableId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.NUMBER,
         required: true,
       },
       empty_space: {
-        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        type: Sequelize.ARRAY(Sequelize.NUMBER),
         defaultValue: [],
       },
       // classId: {
@@ -37,7 +37,7 @@ module.exports = (sequelize, Sequelize) => {
     { timestamps: false }
   );
 
-  Group.belongsTo(Timetable, { foreignKey: "timetableId" });
-  Timetable.hasMany(Group, { foreignKey: "timetableId", as: "groups" });
+  // Group.belongsTo(Timetable, { foreignKey: "timetableId" });
+  // Timetable.hasMany(Group, { foreignKey: "timetableId", as: "groups" });
   return Group;
 };

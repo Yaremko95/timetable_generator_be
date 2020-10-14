@@ -2,22 +2,22 @@ const express = require("express");
 
 const router = express.Router();
 const User = require("../../db/UserSchema");
-const Class = require("./schemas/ClassSchema");
-const GroupClass = require("./schemas/GroupClass");
+const Class = require("../../db/ClassSchema");
+const GroupClass = require("../../db/GroupClass");
 const {
   teachers,
   groups,
   classrooms,
   classes,
 } = require("../loadData/testData");
-const ClassRoom = require("./schemas/ClassRoomSchema");
-const Group = require("./schemas/GroupSchema");
+const ClassRoom = require("../../db/ClassRoomSchema");
+const Group = require("../../db/GroupSchema");
 const Timetable = require("../../db/TimeTableSchema");
 const TeacherEmptySpace = require("./schemas/TeacherEmptySpace");
-const TimetableFreeSpace = require("./schemas/TimetableFreeSpace");
+const TimetableFreeSpace = require("../../db/TimetableFreeSpace");
 //const UserGroup = require("./schemas/UserGroup");
 const Json2csvParser = require("json2csv").Parser;
-const ClassFilledSpace = require("./schemas/ClassFilledSpace");
+const ClassFilledSpace = require("../../db/ClassFilledSpace");
 const {
   setToDefault,
   getTimetable,

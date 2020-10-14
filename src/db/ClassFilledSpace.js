@@ -1,4 +1,4 @@
-const db = require("../../../db");
+const db = require("./index");
 const Class = db.classes;
 const TimetableFreeSpace = db.timetableFreeSpaces;
 //const Classroom = db.classrooms

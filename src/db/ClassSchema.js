@@ -1,7 +1,7 @@
-const orm = require("../../../db");
+const orm = require("./index");
 const Sequelize = require("sequelize");
 
-const db = require("../../db");
+const db = require("./index");
 const User = db.users;
 const Group = db.groups;
 //const User = require("../../users/UserSchema");

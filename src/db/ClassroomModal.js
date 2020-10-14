@@ -2,7 +2,7 @@
 // const Sequelize = require("sequelize");
 //const Timetable = require("./TimeTableSchema");
 
-const db = require("../../db");
+const db = require("./index");
 const Timetable = db.timetables;
 module.exports = (sequelize, Sequelize) => {
   const ClassRoom = sequelize.define(
@@ -26,7 +26,7 @@ module.exports = (sequelize, Sequelize) => {
       timestamps: false,
     }
   );
-  ClassRoom.belongsTo(Timetable, { foreignKey: "timetableId" });
-  Timetable.hasMany(ClassRoom, { foreignKey: "timetableId", as: "classrooms" });
+  // ClassRoom.belongsTo(Timetable, { foreignKey: "timetableId" });
+  // Timetable.hasMany(ClassRoom, { foreignKey: "timetableId", as: "classrooms" });
   return ClassRoom;
 };
