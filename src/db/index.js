@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const path = require("path");
 //const UserModel = require("./UserSchema");
-
+const bcrypt = require("bcrypt");
 const sequelize = new Sequelize(
   process.env.DATABSE,
   process.env.USERNAME,
@@ -35,7 +35,7 @@ db.timetableFreeSpaces = require("./TimetableFreeSpaceModal")(
 );
 db.classFilledSpaces = require("./ClassFilledSpaceModal")(sequelize, Sequelize);
 db.groups = require("./GroupModal")(sequelize, Sequelize);
-db.classrooms = require("./ClassModal")(sequelize, Sequelize);
+db.classrooms = require("./ClassroomModalModal")(sequelize, Sequelize);
 db.classroomClasses = require("./ClassroomClassModal")(sequelize, Sequelize);
 db.groupClasses = require("./GroupClassModal")(sequelize, Sequelize);
 const User = db.users;
