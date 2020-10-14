@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-
+const path = require("path");
 const sequelize = new Sequelize(
   process.env.DATABSE,
   process.env.USERNAME,
@@ -20,7 +20,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tables
-db.users = sequelize.import(__dirname + "/UserSchema");
+db.users = sequelize.import(path.join(__dirname + "/UserSchema"));
 db.timetables = require(__dirname + "/TimeTableSchema")(sequelize, Sequelize);
 db.classes = require("../services/timetable/schemas/ClassSchema")(
   sequelize,
