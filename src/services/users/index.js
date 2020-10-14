@@ -99,16 +99,16 @@ router.route("/login").post(async (req, res, next) => {
         );
         res.cookie("accessToken", token, {
           path: "/",
-          // secure: true,
-          // httpOnly: true,
-          // sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          sameSite: "none",
         });
 
         res.cookie("refreshToken", refreshToken, {
           path: "/",
-          // secure: true,
-          // httpOnly: true,
-          // sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          sameSite: "none",
         });
 
         return res.json({
@@ -146,16 +146,16 @@ router.route("/refreshToken").post(async (req, res, next) => {
           const { accessToken, refreshToken } = authenticate(user);
           res.cookie("accessToken", accessToken, {
             path: "/",
-            // secure: true,
-            // httpOnly: true,
-            // sameSite: "none",
+            secure: true,
+            httpOnly: true,
+            sameSite: "none",
           });
 
           res.cookie("refreshToken", refreshToken, {
             path: "/",
-            // secure: true,
-            // httpOnly: true,
-            // sameSite: "none",
+            secure: true,
+            httpOnly: true,
+            sameSite: "none",
           });
           res.send({
             refreshToken,

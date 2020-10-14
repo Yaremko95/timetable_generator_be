@@ -1,11 +1,11 @@
 const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(
-  process.env.PGDATABASE,
-  process.env.PGUSER,
-  process.env.PGPASSWORD,
+  process.env.DATABSE,
+  process.env.USERNAME,
+  process.env.PASSWORD,
   {
-    host: process.env.PGHOST,
+    host: process.env.HOST,
     dialect: "postgres",
     pool: {
       //optional!
