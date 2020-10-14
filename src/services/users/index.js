@@ -42,7 +42,7 @@ router
           ...req.user.dataValues,
           password: "",
           refresh_tokens: [],
-          timetable: timetable.get({ plain: true }),
+          timetable: timetable ? timetable.get({ plain: true }) : {},
         });
       } catch (e) {
         console.log(e);
