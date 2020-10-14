@@ -468,7 +468,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
       where: { title: "Strive School" },
       defaults: {
         title: "Strive School",
-        adminId: 140,
+        adminId: 1,
         total_hours: 60,
         total_days: 5,
         // start_time: setDate(8, 30),
