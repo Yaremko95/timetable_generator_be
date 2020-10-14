@@ -20,7 +20,10 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tables
-db.users = sequelize["import"]("../services/users/UserSchema");
+db.users = require("../services/users/UserSchema.js").default(
+  sequelize,
+  Sequelize
+);
 db.timetables = require("../services/timetable/schemas/TimeTableSchema")(
   sequelize,
   Sequelize
