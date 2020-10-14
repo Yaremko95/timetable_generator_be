@@ -1,12 +1,12 @@
-const orm = require("../../db");
-const Sequelize = require("sequelize");
+//const orm = require("../../db");
+//const Sequelize = require("sequelize");
 const Moment = require("moment");
 const bcrypt = require("bcrypt");
 const Group = require("../timetable/schemas/GroupSchema");
 //const UserGroup = require("../timetable/schemas/UserGroup");
 const Timetable = require("../timetable/schemas/TimeTableSchema");
-module.exports = (sequelize, DataTypes) => {
-  const User = orm.define(
+module.exports = (sequelize, Sequelize) => {
+  const User = sequelize.define(
     "users",
     {
       id: {

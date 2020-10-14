@@ -15,15 +15,39 @@ const sequelize = new Sequelize(
   }
 );
 const models = {
-  User: require("../services/users/UserSchema"),
-  Timetable: require("../services/timetable/schemas/TimeTableSchema"),
-  Class: require("../services/timetable/schemas/ClassSchema"),
-  TimetableFreeSpace: require("../services/timetable/schemas/TimetableFreeSpace"),
-  ClassFilledSpace: require("../services/timetable/schemas/ClassFilledSpace"),
-  Group: require("../services/timetable/schemas/GroupSchema"),
-  Classroom: require("../services/timetable/schemas/ClassRoomSchema"),
-  ClassroomClass: require("../services/timetable/schemas/ClassromClass"),
-  GroupClass: require("../services/timetable/schemas/GroupClass"),
+  User: require("../services/users/UserSchema")(sequelize, Sequelize),
+  Timetable: require("../services/timetable/schemas/TimeTableSchema")(
+    sequelize,
+    Sequelize
+  ),
+  Class: require("../services/timetable/schemas/ClassSchema")(
+    sequelize,
+    Sequelize
+  ),
+  TimetableFreeSpace: require("../services/timetable/schemas/TimetableFreeSpace")(
+    sequelize,
+    Sequelize
+  ),
+  ClassFilledSpace: require("../services/timetable/schemas/ClassFilledSpace")(
+    sequelize,
+    Sequelize
+  ),
+  Group: require("../services/timetable/schemas/GroupSchema")(
+    sequelize,
+    Sequelize
+  ),
+  Classroom: require("../services/timetable/schemas/ClassRoomSchema")(
+    sequelize,
+    Sequelize
+  ),
+  ClassroomClass: require("../services/timetable/schemas/ClassromClass")(
+    sequelize,
+    Sequelize
+  ),
+  GroupClass: require("../services/timetable/schemas/GroupClass")(
+    sequelize,
+    Sequelize
+  ),
 };
 
 Object.keys(models).forEach((modelName) => {
