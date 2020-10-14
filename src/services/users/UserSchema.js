@@ -100,9 +100,9 @@ module.exports = (sequelize, Sequelize) => {
   User.prototype.validPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
   };
-  Group.hasMany(User, { foreignKey: "groupId", as: "students" });
-  User.belongsTo(Group, { foreignKey: "groupId" });
-  User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
-  Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
+  // Group.hasMany(User, { foreignKey: "groupId", as: "students" });
+  // User.belongsTo(Group, { foreignKey: "groupId" });
+  // User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
+  // Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
   return User;
 };

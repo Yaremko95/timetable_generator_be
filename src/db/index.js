@@ -20,7 +20,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tables
-db.customers = require("../services/users/UserSchema")(sequelize, Sequelize);
+db.users = require("../services/users/UserSchema")(sequelize, Sequelize);
 // const models = {
 //   User: require("../services/users/UserSchema")(sequelize, Sequelize),
 //   Timetable: require("../services/timetable/schemas/TimeTableSchema")(
