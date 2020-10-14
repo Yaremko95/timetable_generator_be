@@ -13,7 +13,7 @@ const {
 const ClassRoom = require("../../db/index").classrooms;
 const Group = require("../../db/index").groups;
 const Timetable = require("../../db/index").timetables;
-const TeacherEmptySpace = require("./schemas/index");
+//const TeacherEmptySpace = require("./schemas/index");
 //const TimetableFreeSpace = require("../../db/index");
 //const UserGroup = require("./schemas/UserGroup");
 const Json2csvParser = require("json2csv").Parser;
