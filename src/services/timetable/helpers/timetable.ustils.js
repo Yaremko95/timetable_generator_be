@@ -45,22 +45,47 @@ const setToDefault = async (timetableId) => {
 
 const getTimetable = async (timetableId) => {
   try {
-    const timetable = await Timetable.findOne({
-      where: { id: timetableId },
-      // raw: true,
+    const free = await TimetableFreeSpace.findAll({
+      where: { timetableId },
+      include: [{ model: ClassFilledSpace, as: "freeSpace", required: false }],
+      order: [
+        ["classroomId", "ASC"],
+        ["free_space", "ASC"],
+      ],
+    });
+    const classes = await Class.findAll({
+      where: { timetableId },
       include: [
         {
-          model: TimetableFreeSpace,
-          as: "free",
-
-          include: [
-            { model: ClassFilledSpace, as: "freeSpace", required: false },
-          ],
+          model: User,
+          as: "teacher",
+          attributes: ["id", "name", "surname", "email"],
         },
         {
-          model: TeacherEmptySpace,
-          as: "teacher_empty_space",
+          model: ClassFilledSpace,
+          as: "filled",
+          include: [{ model: TimetableFreeSpace, as: "freeSpace" }],
         },
+        {
+          model: Group,
+          as: "groups",
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: ClassRoom,
+          as: "classrooms",
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
+    const timetable = await Timetable.findOne({
+      where: { id: timetableId },
+
+      include: [
         {
           model: Group,
           as: "groups",
@@ -69,43 +94,10 @@ const getTimetable = async (timetableId) => {
           model: ClassRoom,
           as: "classrooms",
         },
-        {
-          model: Class,
-          as: "classes",
-          include: [
-            {
-              model: User,
-              as: "teacher",
-              attributes: ["id", "name", "surname", "email"],
-            },
-            {
-              model: ClassFilledSpace,
-              as: "filled",
-            },
-            {
-              model: Group,
-              as: "groups",
-              through: {
-                attributes: [],
-              },
-            },
-            {
-              model: ClassRoom,
-              as: "classrooms",
-              through: {
-                attributes: [],
-              },
-            },
-          ],
-        },
-      ],
-      order: [
-        [{ model: TimetableFreeSpace, as: "free" }, "classroomId", "ASC"],
-        [{ model: TimetableFreeSpace, as: "free" }, "free_space", "ASC"],
       ],
     });
     // console.log(timetable.get({ plain: true }));
-    return timetable.get({ plain: true });
+    return { ...timetable.get({ plain: true }), free: free, classes: classes };
   } catch (e) {
     console.log(e);
   }
@@ -133,7 +125,9 @@ const populateTimetable = async (timetable) => {
         }
         const startTime = startField.free_space;
         const endTime = startTime + cl.duration - 1;
-        if (startTime % 5 > endTime % 5) {
+        const hrsDay = timetable.total_hours / timetable.total_days;
+        console.log(hrsDay, "populate");
+        if (startTime % hrsDay > endTime % hrsDay) {
           ////refactor
           ind++;
           continue;
@@ -235,7 +229,7 @@ const validTeacherGroupRaw = (free, classes, indClass, time) => {
   let isValid = true;
   const c1 = classes.find((item) => item.id === indClass);
   const raw = free.filter((slot) => slot.free_space === time);
-  console.log("raw", raw);
+
   raw.forEach((slot) => {
     if (slot.isFree === false) {
       const c2 = classes.find((item) => item.id === slot.freeSpace.classId);
@@ -248,7 +242,6 @@ const validTeacherGroupRaw = (free, classes, indClass, time) => {
 
       g1.forEach((g) => {
         if (g2.find((item) => item.id === g.id)) {
-          console.log(g1, g2);
           isValid = false;
           return isValid;
         }
@@ -258,7 +251,7 @@ const validTeacherGroupRaw = (free, classes, indClass, time) => {
   return isValid;
 };
 
-const mutateValidSpot = async (free, classes, indClass) => {
+const mutateValidSpot = async (free, classes, indClass, hrsDay) => {
   const classs = classes.find((c) => c.id === indClass);
   const fields = classs.filled;
   let ind = 0;
@@ -274,7 +267,8 @@ const mutateValidSpot = async (free, classes, indClass) => {
 
     const startTime = startField.free_space;
     const endTime = startTime + classs.duration - 1;
-    if (startTime % 5 > endTime % 5) {
+    console.log(hrsDay, "mutateToAvailableSlot");
+    if (startTime % hrsDay > endTime % hrsDay) {
       ////refactor
       ind++;
       continue;
@@ -288,7 +282,7 @@ const mutateValidSpot = async (free, classes, indClass) => {
     for (let i = 0; i < classs.duration; i++) {
       const time = i + startTime;
       const isValid = validTeacherGroupRaw(free, classes, indClass, time);
-      console.log(isValid);
+
       if (
         !free.find(
           (slot) =>
@@ -298,7 +292,6 @@ const mutateValidSpot = async (free, classes, indClass) => {
         ) ||
         !isValid
       ) {
-        console.log("not found");
         found = false;
         ind++;
         break;
@@ -306,7 +299,6 @@ const mutateValidSpot = async (free, classes, indClass) => {
     }
 
     if (found) {
-      console.log("found");
       await TimetableFreeSpace.update(
         { isFree: true },
         {
@@ -368,7 +360,7 @@ const mutateValidSpot = async (free, classes, indClass) => {
   }
 };
 
-const evolutionaryAlgorithm = async (classes, free) => {
+const evolutionaryAlgorithm = async (classes, free, hrsDay) => {
   try {
     const n = 3;
     let sigma = 2;
@@ -396,7 +388,7 @@ const evolutionaryAlgorithm = async (classes, free) => {
         const costList = sortByValue(costClass);
         for (let i = 0; i < Math.floor(costList.length / 4); i++) {
           if (Math.random() * (1 - 0) + 0 < sigma && costList[i][1] !== 0) {
-            await mutateValidSpot(free, classes, costList[i][0]);
+            await mutateValidSpot(free, classes, costList[i][0], hrsDay);
           }
         }
         const [
@@ -426,7 +418,7 @@ const evolutionaryAlgorithm = async (classes, free) => {
     }
   } catch (e) {}
 };
-const findAvailableSlots = (timetable, indClass) => {
+const findAvailableSlots = (timetable, indClass, hrsDay) => {
   try {
     const { free, classes } = timetable;
     const c1 = classes.find((c) => c.id === indClass);
@@ -459,9 +451,10 @@ const findAvailableSlots = (timetable, indClass) => {
     for (let i = 0; i < classAvailableSpace.length - c1.duration + 1; i++) {
       const startTime = classAvailableSpace[i].free_space;
       const endTime = classAvailableSpace[i + c1.duration - 1].free_space;
+      //const hrsDay = timetable.total_hours / timetable;
       if (
         endTime - startTime === c1.duration - 1 &&
-        startTime % 5 <= endTime % 5
+        startTime % hrsDay <= endTime % hrsDay
       ) {
         const list = [];
         for (let j = 0; j < c1.duration; j++) {
@@ -485,7 +478,6 @@ const validSlotsCost = (free, classes, indClass, newSlots) => {
 
     raw.forEach((slot) => {
       if (slot.isFree === false && slot.freeSpace.classId !== c1.id) {
-        console.log("slot", slot);
         const c2 = classes.find((item) => item.id === slot.freeSpace.classId);
         if (c1.teacher === c2.teacher) {
           isValid = false;
@@ -496,7 +488,6 @@ const validSlotsCost = (free, classes, indClass, newSlots) => {
 
         g1.forEach((g) => {
           if (g2.find((item) => item.id === g.id)) {
-            console.log(g1, g2);
             isValid = false;
             return isValid;
           }
@@ -537,18 +528,16 @@ const mutateToAvailableSlot = async (free, classes, indClass, newSlotsList) => {
         returning: true,
       }
     );
-    console.log(result);
+
     result = result[1].map((e) => e.id);
-    console.log("after", result);
+
     for (let i = 0; i < result.length; i++) {
       await ClassFilledSpace.create({
         classId: cl.id,
         freeSpaceId: result[i],
       });
     }
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 };
 const setDate = (day, h, min) => {
   const date = new Date();
@@ -556,7 +545,7 @@ const setDate = (day, h, min) => {
   const currentDay = date.getDay();
   const distance = day - currentDay;
   date.setDate(date.getDate() + distance);
-  console.log(date);
+
   return date.toString();
 };
 module.exports = {

@@ -19,6 +19,10 @@ passport.use(
             return cb(null, false, { message: "Incorrect email or password." });
           } else if (!user.validPassword(password)) {
             return cb(null, false, { message: "Incorrect email or password." });
+          } else if (!user.isVerified) {
+            return cb(null, false, {
+              message: "Not verified. Please, check your Email",
+            });
           } else {
             return cb(null, user, {
               message: "Logged In Successfully",
@@ -50,7 +54,7 @@ passport.use(
 
       const user = await User.findOne({
         where: {
-          _id: jwtPayload._id,
+          id: jwtPayload.id,
         },
       });
       if (user) {

@@ -15,7 +15,8 @@ const Group = require("./schemas/GroupSchema");
 const Timetable = require("./schemas/TimeTableSchema");
 const TeacherEmptySpace = require("./schemas/TeacherEmptySpace");
 const TimetableFreeSpace = require("./schemas/TimetableFreeSpace");
-const UserGroup = require("./schemas/UserGroup");
+//const UserGroup = require("./schemas/UserGroup");
+const Json2csvParser = require("json2csv").Parser;
 const ClassFilledSpace = require("./schemas/ClassFilledSpace");
 const {
   setToDefault,
@@ -29,7 +30,11 @@ const {
 } = require("./helpers/timetable.ustils");
 const { hardConstraintCost } = require("./helpers/timetableCost");
 const { Op, Sequelize } = require("sequelize");
-router.route("/timetable/:id").get(async (req, res, next) => {
+router.route("/loadTestDataToJson").post(async (req, res, next) => {
+  try {
+  } catch (e) {}
+});
+router.route("/:id").get(async (req, res, next) => {
   try {
     const timetable = await getTimetable(req.params.id);
     const [
@@ -43,128 +48,15 @@ router.route("/timetable/:id").get(async (req, res, next) => {
       timetable.classes,
       timetable.classrooms
     );
+    //console.log(totalCost);
+    console.log(totalCost);
     res.send(timetable);
   } catch (e) {
     console.log(e);
     res.send(e);
   }
 });
-router.route("/classes/teacher/:userId").get(async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const classes = await Timetable.findAll({
-      include: [
-        {
-          model: Group,
-          as: "groups",
-          include: [
-            {
-              model: User,
-              as: "students",
-            },
-          ],
-        },
-        {
-          model: ClassRoom,
-          as: "classrooms",
-        },
-        {
-          model: Class,
-          as: "classes",
-          where: { [Op.or]: [{ teacherId: userId }] },
-          include: [
-            {
-              model: User,
-              as: "teacher",
-              attributes: ["id", "name", "surname", "email"],
-            },
-            {
-              model: ClassFilledSpace,
-              as: "filled",
-            },
-            {
-              model: Group,
-              as: "groups",
-              through: {
-                attributes: [],
-              },
-            },
-            {
-              model: ClassRoom,
-              as: "classrooms",
-              through: {
-                attributes: [],
-              },
-            },
-          ],
-        },
-      ],
-    });
-
-    res.send(classes);
-  } catch (e) {
-    console.log(e);
-    next(e);
-  }
-});
-router.route("/classes/student/:userId").get(async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const user = await User.findOne({
-      where: { id: userId },
-      include: [
-        {
-          model: Group,
-          include: [
-            {
-              model: Class,
-              as: "classes",
-              through: { attributes: [] },
-              include: [
-                {
-                  model: User,
-                  as: "teacher",
-                  attributes: ["id", "name", "surname", "email"],
-                },
-                {
-                  model: ClassFilledSpace,
-                  as: "filled",
-                },
-                {
-                  model: Group,
-                  as: "groups",
-
-                  through: {
-                    attributes: [],
-                  },
-                  include: [
-                    {
-                      model: User,
-                      as: "students",
-                    },
-                  ],
-                },
-                {
-                  model: ClassRoom,
-                  as: "classrooms",
-                  through: {
-                    attributes: [],
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-
-    res.send(user);
-  } catch (e) {
-    console.log(e);
-    next(e);
-  }
-});
-router.route("/timetable/:id").delete(async (req, res, next) => {
+router.route("/:id").delete(async (req, res, next) => {
   try {
     await Timetable.destroy({
       where: {
@@ -176,49 +68,409 @@ router.route("/timetable/:id").delete(async (req, res, next) => {
     console.log(e);
   }
 });
+router.route("/classes/:userId").get(async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findOne({ where: { id: userId } });
+    const groupWhere = user.groupId ? { id: user.groupId } : {};
+    const classWhere = !user.groupId ? { teacherId: user.id } : {};
+    const classes = await Timetable.findAll(
+      //{ where: { ["groups.students.id"]: userId } },
+      {
+        include: [
+          {
+            model: Group,
+            as: "groups",
+            where: groupWhere,
+            include: [
+              {
+                model: User,
+                as: "students",
+              },
+            ],
+          },
+          {
+            model: ClassRoom,
+            as: "classrooms",
+          },
+          {
+            model: Class,
+            as: "classes",
+            where: classWhere,
+            include: [
+              {
+                model: User,
+                as: "teacher",
+                attributes: ["id", "name", "surname", "email"],
+              },
+              {
+                model: ClassFilledSpace,
+                as: "filled",
+              },
+              {
+                model: Group,
+                as: "groups",
+                through: {
+                  attributes: [],
+                },
+              },
+              {
+                model: ClassRoom,
+                as: "classrooms",
+                through: {
+                  attributes: [],
+                },
+              },
+            ],
+          },
+        ],
+      }
+    );
+
+    res.send(classes);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+// router.route("/classes/student/:userId").get(async (req, res, next) => {
+//   try {
+//     const { userId } = req.params;
+//     const user = await User.findOne({
+//       where: { id: userId },
+//       include: [
+//         {
+//           model: Group,
+//           include: [
+//             {
+//               model: Class,
+//               as: "classes",
+//               through: { attributes: [] },
+//               include: [
+//                 {
+//                   model: User,
+//                   as: "teacher",
+//                   attributes: ["id", "name", "surname", "email"],
+//                 },
+//                 {
+//                   model: ClassFilledSpace,
+//                   as: "filled",
+//                 },
+//                 {
+//                   model: Group,
+//                   as: "groups",
+//
+//                   through: {
+//                     attributes: [],
+//                   },
+//                   include: [
+//                     {
+//                       model: User,
+//                       as: "students",
+//                     },
+//                   ],
+//                 },
+//                 {
+//                   model: ClassRoom,
+//                   as: "classrooms",
+//                   through: {
+//                     attributes: [],
+//                   },
+//                 },
+//               ],
+//             },
+//           ],
+//         },
+//         {},
+//       ],
+//     });
+//
+//     res.send(user);
+//   } catch (e) {
+//     console.log(e);
+//     next(e);
+//   }
+// });
+
+router.route("/users/toCsv").post(async (req, res) => {
+  try {
+    // const data = await ExperienceSchema.find({ username: req.params.userName });
+    const teachersData = teachers;
+    const list = [];
+    Object.keys(teachersData).forEach((user) => {
+      const newUser = {
+        email: user.toLowerCase().split(" ").join("").concat("@gmail.com"),
+        name: user.split(" ")[0],
+        surname: user.split(" ")[1],
+        role: "teacher",
+      };
+      list.push(newUser);
+    });
+
+    const jsonData = JSON.parse(JSON.stringify(list));
+    //  console.log(jsonData);
+    const csvFields = ["name", "surname", "email", "role"];
+    const json2csvParser = new Json2csvParser({ csvFields });
+    const csvData = json2csvParser.parse(jsonData);
+    res.setHeader("Content-disposition", "attachment; filename=teachers.csv");
+    res.set("Content-Type", "text/csv");
+    res.status(200).end(csvData);
+  } catch (e) {
+    console.log(e);
+  }
+});
 
 router.route("/loadClasses").post(async (req, res, next) => {
   try {
+    // let testClasses = classes.splice(0, 5);
+    //let test = classes;
     let test = [
       {
         subject: "web ",
         teacher: "Diego Banovaz",
         groups: ["401", "22"],
-        classrooms: ["c"],
+        classrooms: ["U1"],
         duration: "2",
       },
       {
         subject: "Konkurentni i distribuirani sistemi",
         teacher: "Milojkovic Branislav",
         groups: ["402"],
-        classrooms: ["c"],
+        classrooms: ["U1"],
         duration: "3",
       },
       {
         subject: "Konkurentni i distribuirani sistemi",
         teacher: "Diego Banovaz",
         groups: ["401", "402", "405"],
-        classrooms: ["d"],
+        classrooms: ["U2"],
         duration: "3",
       },
-      // {
-      //   subject: "Softversko inzenjerstvo",
-      //
-      //   teacher: "Markovic Ana",
-      //   groups: ["402"],
-      //   classrooms: "d",
-      //   duration: "4",
-      // },
+      {
+        subject: "Softversko inzenjerstvo",
+
+        teacher: "Markovic Ana",
+        groups: ["402"],
+        classrooms: ["U2"],
+        duration: "3",
+      },
+      {
+        subject: "Programski prevodioci",
+
+        teacher: "Vujosevic Dusan",
+        groups: [
+          "301",
+          "302",
+          "303",
+          "304",
+          "305",
+          "306",
+          "307",
+          "308",
+          "309",
+          "309a",
+        ],
+        classrooms: ["U1"],
+        duration: "2",
+      },
+      {
+        subject: "Interakcija covek racunar",
+
+        teacher: "Vujosevic Dusan",
+        groups: [
+          // "301",
+          // "302",
+          // "303",
+          // "304",
+          // "305",
+          // "306",
+          // "307",
+          // "308",
+          "309",
+          "309a",
+          "2s1",
+          "2s2",
+        ],
+        classrooms: ["U1"],
+        duration: "2",
+      },
+      {
+        subject: "Masinsko ucenje",
+
+        teacher: "Ilic Nemanja",
+        groups: ["301", "302", "306", "308"],
+        classrooms: ["U1"],
+        duration: "2",
+      },
+      {
+        subject: "Interakcija covek racunar",
+
+        teacher: "Radosavljevic Nemanja",
+        groups: ["301", "303", "304", "305"],
+        classrooms: ["U1", "U2"],
+        duration: "2",
+      },
+      {
+        subject: "WEB programiranje",
+
+        teacher: "Vidakovic MIlan",
+        groups: ["309", "314", "319", "322"],
+        classrooms: ["U1", "U2"],
+        duration: "2",
+      },
+      {
+        subject: "WEB programiranje",
+
+        teacher: "Gavrilovic Vuk",
+        groups: ["301", "303", "304", "307", "322"],
+        classrooms: ["U1", "U2"],
+        duration: "2",
+      },
+      {
+        subject: "Programski prevodioci",
+
+        teacher: "Stankovic Ivana",
+        groups: ["301", "305", "308"],
+        classrooms: ["U2"],
+        duration: "2",
+      },
+      {
+        subject: "Softverske komponente",
+        teacher: "Dimic Surla Bojana",
+        groups: ["301", "307", "309a"],
+        classrooms: ["U1"],
+        duration: "2",
+      },
+      {
+        subject: "Graficki dizajn 2",
+        tip: "P",
+        teacher: "Malesevic Nenad",
+        groups: ["3d1"],
+        classrooms: ["U1", "U3"],
+        duration: "3",
+      },
+      {
+        subject: "Graficki dizajn 2",
+        tip: "V",
+        teacher: "Malesevic Nenad",
+        groups: ["3d1"],
+        classrooms: ["U3"],
+        duration: "3",
+      },
+      {
+        subject: "Muzicka produkcija 3",
+        tip: "P",
+        teacher: "Ognjanovic Ivana",
+        groups: ["3d1"],
+        classrooms: ["U3"],
+        duration: "3",
+      },
+      {
+        subject: "Muzicka produkcija 3",
+        tip: "V",
+        teacher: "Ognjanovic Ivana",
+        groups: ["3d1"],
+        classrooms: ["U3"],
+        duration: "3",
+      },
+      {
+        subject: "Racunarska animacija",
+        tip: "P",
+        teacher: "Djuric Milan",
+        groups: ["3d1"],
+        classrooms: ["U1", "U2"],
+        duration: "3",
+      },
+      {
+        subject: "Konkurentni i distribuirani sistemi",
+        tip: "V",
+        teacher: "Milojkovic Branislav",
+        groups: ["401"],
+        classrooms: ["U3"],
+        duration: "3",
+      },
+      {
+        subject: "Softversko inzenjerstvo",
+        tip: "V",
+        teacher: "Markovic Ana",
+        groups: ["401"],
+        classrooms: ["U3", "U2"],
+        duration: "3",
+      },
+      {
+        subject: "Softversko inzenjerstvo",
+        tip: "P",
+        teacher: "Perisic Branko",
+        groups: ["401", "402"],
+        classrooms: ["U1", "U3"],
+        duration: "3",
+      },
+      {
+        subject: "Teorija algoritama, automata i jezika",
+        tip: "P",
+        teacher: "Jovanovic Jelena",
+        groups: ["401", "402"],
+        classrooms: ["U1", "U3"],
+        duration: "3",
+      },
+      {
+        subject: "Teorija algoritama, automata i jezika",
+        tip: "V",
+        teacher: "Tomic Milan",
+        groups: ["401", "402"],
+        classrooms: ["U1", "U3"],
+        duration: "3",
+      },
+      {
+        subject: "Konkurentni i distribuirani sistemi",
+        tip: "P",
+        teacher: "Milinkovic Stevan",
+        groups: ["401", "402", "405"],
+        classrooms: ["U1", "U2"],
+        duration: "3",
+      },
+      {
+        subject: "Konkurentni i distribuirani sistemi",
+        tip: "V",
+        teacher: "Milojkovic Branislav",
+        groups: ["402"],
+        classrooms: ["U3", "U1"],
+        duration: "3",
+      },
+      {
+        subject: "Softversko inzenjerstvo",
+        tip: "V",
+        teacher: "Markovic Ana",
+        groups: ["402"],
+        classrooms: ["U3", "U1"],
+        duration: "3",
+      },
+      {
+        subject: "Konkurentni i distribuirani sistemi",
+        tip: "V",
+        teacher: "Milojkovic Branislav",
+        groups: ["405"],
+        classrooms: ["U3", "U2"],
+        duration: "3",
+      },
+      {
+        subject: "Digitalna obrada signala",
+        tip: "P",
+        teacher: "Babic Djorde",
+        groups: ["405"],
+        classrooms: ["U3"],
+        duration: "3",
+      },
     ];
-    const weekDays = [1, 2, 4, 5];
+    const weekDays = [1, 2, 3, 4, 5];
 
     const [timetable, timetableCreated] = await Timetable.findOrCreate({
-      where: { title: "strive4" },
+      where: { title: "Strive School" },
       defaults: {
-        title: "strive4",
-        adminId: 55,
-        total_hours: 20,
-        total_days: 4,
+        title: "Strive School",
+        adminId: 140,
+        total_hours: 60,
+        total_days: 5,
         // start_time: setDate(8, 30),
       },
     });
@@ -243,6 +495,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
           role: "teacher",
         },
       });
+
       const [
         teacherEmptySpace,
         teacherEmptySpaceCreated,
@@ -257,6 +510,7 @@ router.route("/loadClasses").post(async (req, res, next) => {
           empty_space: [],
         },
       });
+      // console.log(user);
       const groupsId = [];
       for (let g = 0; g < test[i].groups.length; g++) {
         const [group, groupCreated] = await Group.findOrCreate({
@@ -304,11 +558,13 @@ router.route("/loadClasses").post(async (req, res, next) => {
         duration: test[i].duration,
         teacherId: user.id,
         timetableId: timetable.id,
-      }).then(async (newClass) => {
+      }).then((newClass) => {
+        // console.log(newClass);
         newClass.addGroups(groupsId);
         newClass.addClassrooms(classroomsId);
       });
     }
+
     res.send("ok");
   } catch (e) {
     console.log(e);
@@ -329,9 +585,13 @@ router.route("/generate/:timetableId").get(async (req, res, next) => {
     await setToDefault(timetableId);
     const timetable = await getTimetable(timetableId);
     const { classes, free } = await populateTimetable(timetable);
-    await evolutionaryAlgorithm(classes, free);
-    //const newtimetable = await getTimetable(timetableId);
-    res.send("ok");
+    const hrsDay = timetable.total_hours / timetable.total_days;
+
+    await evolutionaryAlgorithm(classes, free, hrsDay);
+    const newtimetable = await getTimetable(timetableId);
+    console.log(hrsDay);
+    //console.log(newtimetable);
+    res.send(newtimetable);
   } catch (e) {
     console.log(e);
   }
@@ -346,7 +606,8 @@ router
 
       const classAvailableSpace = findAvailableSlots(
         timetable,
-        parseInt(classId)
+        parseInt(classId),
+        timetable.total_hours / timetable.total_days
       );
       res.send(classAvailableSpace);
     } catch (e) {}

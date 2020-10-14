@@ -18,6 +18,14 @@
 //   },
 //   { timestamps: false }
 // );
-// Group.belongsToMany(User, { through: UserGroup, as: "users" });
-// User.belongsToMany(Group, { through: UserGroup, as: "groups" });
+// Group.belongsToMany(User, {
+//   through: UserGroup,
+//   foreignKey: "userId",
+//   as: "users",
+// });
+// User.belongsToMany(Group, {
+//   through: UserGroup,
+//   foreignKey: "groupId",
+//   as: "groups",
+// });
 // module.exports = UserGroup;

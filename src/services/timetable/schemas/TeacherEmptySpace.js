@@ -30,6 +30,6 @@ TeacherEmptySpace.belongsTo(User, { foreignKey: "teacherId" });
 TeacherEmptySpace.belongsTo(Timetable, { foreignKey: "timetableId" });
 Timetable.hasMany(TeacherEmptySpace, {
   foreignKey: "timetableId",
-  as: "teacher_empty_space",
+  as: "teachers",
 });
 module.exports = TeacherEmptySpace;

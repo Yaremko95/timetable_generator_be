@@ -15,11 +15,11 @@ const User = orm.define(
     },
     name: {
       type: Sequelize.STRING,
-      required: true,
+      allowNull: false,
     },
     surname: {
       type: Sequelize.STRING,
-      required: true,
+      allowNull: false,
     },
     role: {
       type: Sequelize.STRING,
@@ -31,20 +31,20 @@ const User = orm.define(
     },
     email: {
       type: Sequelize.STRING,
-      // allowNull: false,
+      allowNull: false,
       // unique: true,
     },
     password: {
       type: Sequelize.STRING,
       allowNull: true,
-      validate: function (value) {
-        if (value === null && this.googleid === null) {
-          throw new Error("Please provide password");
-        }
-      },
-      get() {
-        return "";
-      },
+      // validate: function (value) {
+      //   if (value === null && this.googleid === null) {
+      //     throw new Error("Please provide password");
+      //   }
+      // },
+      // get() {
+      //   return "";
+      // },
     },
     refresh_tokens: {
       type: Sequelize.ARRAY(Sequelize.STRING),

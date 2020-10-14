@@ -3,10 +3,10 @@ const User = require("../UserSchema");
 
 const authenticate = async (user) => {
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "150000",
+    expiresIn: "1 week",
   });
   const refreshToken = jwt.sign(
-    { _id: user._id },
+    { id: user.id },
     process.env.REFRESH_JWT_SECRET,
     {
       expiresIn: "1 week",
@@ -16,7 +16,7 @@ const authenticate = async (user) => {
   user.refresh_tokens = user.refresh_tokens.concat(refreshToken);
   await User.update(
     { refresh_tokens: user.refresh_tokens },
-    { where: { _id: user._id } }
+    { where: { id: user.id } }
   );
 
   return { accessToken: token, refreshToken };
