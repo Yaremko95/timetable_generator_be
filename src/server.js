@@ -31,22 +31,18 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(passport.initialize());
-// sequelize.sync().then(() => {
-//   console.log("Drop and Resync with { force: true }");
-// });
 
 app.use("/users", usersRouter);
 //app.use("/load", loadRouter);
 app.use(
   "/timetable",
-  //passport.authenticate("jwt", { session: false }),
+
   timetableRouter
 );
 console.log(listEndpoints(app));
 models.sequelize
-  .sync({ force: true })
+  .sync()
   .then((result) => {
-    console.log(result);
     app.listen(process.env.PORT, () => {
       console.log("running on port ", process.env.PORT);
     });

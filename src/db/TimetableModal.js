@@ -3,9 +3,8 @@
 //const User = require("../../users/UserSchema");
 //const Class = require("./ClassSchema");
 //const TeacherEmptySpace = require("./TeacherEmptySpace");
-//const Group = require("./GroupSchema");
-const { DataTypes } = require("sequelize");
-module.exports = (sequelize, Sequelize) => {
+
+module.exports = (sequelize, DataTypes) => {
   const Timetable = sequelize.define(
     "timetables",
     {
@@ -15,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         required: true,
       },
       total_hours: {

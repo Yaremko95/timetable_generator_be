@@ -1,10 +1,4 @@
-// const orm = require("../../../db");
-// const Sequelize = require("sequelize");
-//const Timetable = require("./TimeTableSchema");
-const { DataTypes } = require("sequelize");
-const db = require("./index");
-const Timetable = db.timetables;
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const ClassRoom = sequelize.define(
     "classrooms",
     {
@@ -14,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         required: true,
       },
       timetableId: {
@@ -26,7 +20,6 @@ module.exports = (sequelize, Sequelize) => {
       timestamps: false,
     }
   );
-  // ClassRoom.belongsTo(Timetable, { foreignKey: "timetableId" });
-  // Timetable.hasMany(ClassRoom, { foreignKey: "timetableId", as: "classrooms" });
+
   return ClassRoom;
 };
