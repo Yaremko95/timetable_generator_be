@@ -28,30 +28,46 @@ router.post(
   }
 );
 
-router
-  .route("/me")
-  .get(
-    passport.authenticate("jwt", { session: false }),
-    async (req, res, next) => {
-      try {
-        const timetable = await Timetable.findOne({
-          where: { adminId: req.user.id },
-        });
-        console.log(timetable);
-        res.status(200).send({
-          ...req.user.dataValues,
-          password: "",
-          refresh_tokens: [],
-          timetable: timetable ? timetable.get({ plain: true }) : {},
-        });
-      } catch (e) {
-        console.log(e);
-        const error = new Error();
-        error.httpStatusCode = 404;
-        next(error);
+router.route("/me").get(
+  //passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async function (
+      err,
+      user,
+      info
+    ) {
+      // console.log(err);
+      // console.log(user);
+      // console.log(info);
+      if (err) {
+        console.log("err", err);
+        return next(err);
       }
-    }
-  );
+      if (!user) {
+        return res.status(401).send("no user");
+      }
+      //else {
+      //   try {
+      //     const timetable = await Timetable.findOne({
+      //       where: { adminId: user.id },
+      //     });
+      //     console.log(timetable);
+      //     return res.status(200).send({
+      //       ...user.dataValues,
+      //       password: "",
+      //       refresh_tokens: [],
+      //       timetable: timetable ? timetable.get({ plain: true }) : {},
+      //     });
+      //   } catch (e) {
+      //     console.log(e);
+      //     const error = new Error();
+      //     error.httpStatusCode = 404;
+      //     return next(error);
+      //   }
+      // }
+    })(req, res, next);
+  }
+);
 
 router.route("/signUp").post(async (req, res, next) => {
   try {
