@@ -81,6 +81,17 @@ const getTimetable = async (timetableId) => {
           },
         },
       ],
+      order: [
+        [
+          {
+            model: ClassFilledSpace,
+            as: "filled",
+          },
+          { model: TimetableFreeSpace, as: "freeSpace" },
+          "free_space",
+          "asc",
+        ],
+      ],
     });
     const timetable = await Timetable.findOne({
       where: { id: timetableId },

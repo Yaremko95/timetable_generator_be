@@ -45,26 +45,25 @@ router.route("/me").get(
       }
       if (!user) {
         return res.status(401).send("no user");
+      } else {
+        try {
+          const timetable = await Timetable.findOne({
+            where: { adminId: user.id },
+          });
+          console.log(timetable);
+          return res.status(200).send({
+            ...user.dataValues,
+            password: "",
+            refresh_tokens: [],
+            timetable: timetable ? timetable.get({ plain: true }) : {},
+          });
+        } catch (e) {
+          console.log(e);
+          const error = new Error();
+          error.httpStatusCode = 404;
+          return next(error);
+        }
       }
-      //else {
-      //   try {
-      //     const timetable = await Timetable.findOne({
-      //       where: { adminId: user.id },
-      //     });
-      //     console.log(timetable);
-      //     return res.status(200).send({
-      //       ...user.dataValues,
-      //       password: "",
-      //       refresh_tokens: [],
-      //       timetable: timetable ? timetable.get({ plain: true }) : {},
-      //     });
-      //   } catch (e) {
-      //     console.log(e);
-      //     const error = new Error();
-      //     error.httpStatusCode = 404;
-      //     return next(error);
-      //   }
-      // }
     })(req, res, next);
   }
 );
@@ -115,16 +114,16 @@ router.route("/login").post(async (req, res, next) => {
         );
         res.cookie("accessToken", token, {
           path: "/",
-          secure: true,
-          httpOnly: true,
-          sameSite: "none",
+          // secure: true,
+          // httpOnly: true,
+          // sameSite: "none",
         });
 
         res.cookie("refreshToken", refreshToken, {
           path: "/",
-          secure: true,
-          httpOnly: true,
-          sameSite: "none",
+          // secure: true,
+          // httpOnly: true,
+          // sameSite: "none",
         });
 
         return res.json({

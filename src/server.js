@@ -41,7 +41,7 @@ app.use(
 );
 console.log(listEndpoints(app));
 models.sequelize
-  .sync({ force: true })
+  .sync()
   .then((result) => {
     app.listen(process.env.PORT, () => {
       console.log("running on port ", process.env.PORT);

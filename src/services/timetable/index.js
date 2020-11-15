@@ -30,9 +30,17 @@ const {
 } = require("./helpers/timetable.ustils");
 const { hardConstraintCost } = require("./helpers/timetableCost");
 const { Op, Sequelize } = require("sequelize");
-router.route("/loadTestDataToJson").post(async (req, res, next) => {
+const multer = require("multer");
+const upload = multer();
+const { bufferToJson } = require("./helpers/utils");
+router.route("/fromCSV").post(upload.single("file"), async (req, res, next) => {
   try {
-  } catch (e) {}
+    const toJson = bufferToJson(req.file.buffer);
+    console.log(toJson);
+    res.status(200).send("ok");
+  } catch (e) {
+    console.log(e);
+  }
 });
 router.route("/:id").get(async (req, res, next) => {
   try {
