@@ -1,15 +1,4 @@
-//const orm = require("../../../db");
-//const Sequelize = require("sequelize");
-//const Timetable = require("./TimeTableSchema");
-//const UserGroup = require("./UserGroup");
-//const User = require("../../users/UserSchema");
-const db = require("./index");
-const { DataTypes } = require("sequelize");
-// const Group = db.groups;
-// const Class = db.classes;
-const Timetable = db.timetables;
-//const Classroom = db.classrooms
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const Group = sequelize.define(
     "groups",
     {
@@ -19,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       title: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         required: true,
       },
       timetableId: {
@@ -27,18 +16,12 @@ module.exports = (sequelize, Sequelize) => {
         required: true,
       },
       empty_space: {
-        type: Sequelize.ARRAY(DataTypes.INTEGER),
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
         defaultValue: [],
       },
-      // classId: {
-      //     type: Sequelize.NUMBER,
-      //     allowNull: false,
-      // }
     },
     { timestamps: false }
   );
 
-  // Group.belongsTo(Timetable, { foreignKey: "timetableId" });
-  // Timetable.hasMany(Group, { foreignKey: "timetableId", as: "groups" });
   return Group;
 };

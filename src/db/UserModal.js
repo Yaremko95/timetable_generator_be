@@ -1,16 +1,6 @@
-//const orm = require("../../db");
-//const Sequelize = require("sequelize");
-const Moment = require("moment");
+const bcrypt = require("bcrypt");
 
-const db = require("./index");
-//const Group = db.groups;
-//const Group = require("../timetable/schemas/GroupSchema");
-//const UserGroup = require("../timetable/schemas/UserGroup");
-
-//const Timetable = db.timetables;
-//const Timetable = require("../timetable/schemas/TimeTableSchema");
-const { DataTypes } = require("sequelize");
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "users",
     {
@@ -20,15 +10,15 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       surname: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       role: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         validate: (value) => {
           if (!["admin", "teacher", "student"].includes(value)) {
             throw new Error("Provide role");
@@ -36,24 +26,16 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
       email: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         // unique: true,
       },
       password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
-        // validate: function (value) {
-        //   if (value === null && this.googleid === null) {
-        //     throw new Error("Please provide password");
-        //   }
-        // },
-        // get() {
-        //   return "";
-        // },
       },
       refresh_tokens: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: [],
       },
@@ -72,13 +54,10 @@ module.exports = (sequelize, Sequelize) => {
       //     required: false
       // }
       googleid: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
       },
-      // timetableID:{
-      //     type: Sequelize.NUMBER,
-      //     allowNull: true,
-      // },
+
       groupId: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -102,12 +81,6 @@ module.exports = (sequelize, Sequelize) => {
       },
     }
   );
-  // User.prototype.validPassword = async function (password) {
-  //   return await bcrypt.compare(password, this.password);
-  // };
-  // Group.hasMany(User, { foreignKey: "groupId", as: "students" });
-  // User.belongsTo(Group, { foreignKey: "groupId" });
-  // User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
-  // Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
+
   return User;
 };

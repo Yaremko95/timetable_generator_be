@@ -1,13 +1,12 @@
 const { Sequelize, DataTypes } = require("sequelize");
-const path = require("path");
-//const UserModel = require("./UserSchema");
+
 const bcrypt = require("bcrypt");
 const sequelize = new Sequelize(
-  process.env.DATABSE,
-  process.env.USERNAME,
-  process.env.PASSWORD,
+  process.env.PGDATABASE,
+  process.env.PGUSER,
+  process.env.PGPASSWORD,
   {
-    host: process.env.HOST,
+    host: process.env.PGHOST,
     dialect: "postgres",
     // dialectOptions: {
     //   ssl: true,
@@ -25,19 +24,19 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tablesSequelize
-db.users = require("./UserModal")(sequelize, Sequelize);
-db.timetables = require("./TimetableModal")(sequelize, Sequelize);
+db.users = require("./UserModal")(sequelize, DataTypes);
+db.timetables = require("./TimetableModal")(sequelize, DataTypes);
 
-db.classes = require("./ClassModal")(sequelize, Sequelize);
+db.classes = require("./ClassModal")(sequelize, DataTypes);
 db.timetableFreeSpaces = require("./TimetableFreeSpaceModal")(
   sequelize,
-  Sequelize
+  DataTypes
 );
-db.classFilledSpaces = require("./ClassFilledSpaceModal")(sequelize, Sequelize);
-db.groups = require("./GroupModal")(sequelize, Sequelize);
-db.classrooms = require("./ClassroomModal")(sequelize, Sequelize);
-db.classroomClasses = require("./ClassroomClassModal")(sequelize, Sequelize);
-db.groupClasses = require("./GroupClassModal")(sequelize, Sequelize);
+db.classFilledSpaces = require("./ClassFilledSpaceModal")(sequelize, DataTypes);
+db.groups = require("./GroupModal")(sequelize, DataTypes);
+db.classrooms = require("./ClassroomModal")(sequelize, DataTypes);
+db.classroomClasses = require("./ClassroomClassModal")(sequelize, DataTypes);
+db.groupClasses = require("./GroupClassModal")(sequelize, DataTypes);
 const User = db.users;
 const Timetable = db.timetables;
 const Class = db.classes;
@@ -47,12 +46,11 @@ const Group = db.groups;
 const Classroom = db.classrooms;
 const ClassroomClass = db.classroomClasses;
 const GroupClass = db.groupClasses;
-//console.log(db);
+
 User.prototype.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-// Group.hasMany(User, { foreignKey: "groupId", as: "students" });
-// User.belongsTo(Group, { foreignKey: "groupId" });
+
 User.hasMany(Timetable, { foreignKey: "adminId", as: "createdTimetables" });
 Timetable.belongsTo(User, { foreignKey: "adminId", as: "admin" });
 User.hasMany(Class, { foreignKey: "teacherId", as: "classes" });
@@ -95,7 +93,5 @@ Group.belongsTo(Timetable, { foreignKey: "timetableId" });
 Timetable.hasMany(Group, { foreignKey: "timetableId", as: "groups" });
 Classroom.belongsTo(Timetable, { foreignKey: "timetableId" });
 Timetable.hasMany(Classroom, { foreignKey: "timetableId", as: "classrooms" });
-// sequelize.sync({ force: true }).then(() => {
-//   console.log(`Database & tables created!`);
-// });
+
 module.exports = db;

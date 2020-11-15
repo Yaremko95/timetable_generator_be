@@ -14,7 +14,7 @@ const ClassRoom = require("../../db/index").classrooms;
 const Group = require("../../db/index").groups;
 const Timetable = require("../../db/index").timetables;
 //const TeacherEmptySpace = require("./schemas/index");
-//const TimetableFreeSpace = require("../../db/index");
+const TimetableFreeSpace = require("../../db/index").timetableFreeSpaces;
 //const UserGroup = require("./schemas/UserGroup");
 const Json2csvParser = require("json2csv").Parser;
 const ClassFilledSpace = require("../../db/index").classFilledSpaces;
@@ -30,9 +30,17 @@ const {
 } = require("./helpers/timetable.ustils");
 const { hardConstraintCost } = require("./helpers/timetableCost");
 const { Op, Sequelize } = require("sequelize");
-router.route("/loadTestDataToJson").post(async (req, res, next) => {
+const multer = require("multer");
+const upload = multer();
+const { bufferToJson } = require("./helpers/utils");
+router.route("/fromCSV").post(upload.single("file"), async (req, res, next) => {
   try {
-  } catch (e) {}
+    const toJson = bufferToJson(req.file.buffer);
+    console.log(toJson);
+    res.status(200).send("ok");
+  } catch (e) {
+    console.log(e);
+  }
 });
 router.route("/:id").get(async (req, res, next) => {
   try {
